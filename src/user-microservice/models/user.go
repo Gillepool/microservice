@@ -11,8 +11,13 @@ type User struct {
 	Password string        `bson:"password" json:"password" example:"gman"`
 }
 
+type AddUser struct {
+	Name     string `bson:"name" json:"name" example:"gman"`
+	Password string `bson:"password" json:"password" example:"gman"`
+}
+
 //Validate user
-func (u User) Validate() error {
+func (u AddUser) Validate() error {
 	var err error
 	switch {
 	case len(u.Name) == 0:

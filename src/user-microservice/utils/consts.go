@@ -17,6 +17,5 @@ const (
 const (
 	StatusCodeUnknown = -1
 	StatusCodeOK      = 1000
-
-	StatusMismatch = 10
+	StatusMismatch    = 10
 )
