@@ -19,6 +19,18 @@ type User struct {
 	utils   utils.Utils
 }
 
+// Authenticate godoc
+// @Summary Check user authentication
+// @Description Authenticate user
+// @Tags admin
+// @Security ApiKeyAuth
+// @Accept  multipart/form-data
+// @Param user formData string true "Username"
+// @Param password formData string true "Password"
+// @Failure 401 {object} models.Error
+// @Failure 500 {object} models.Error
+// @Success 200 {object} models.Token
+// @Router /admin/auth [post]
 func (u *User) Authenticate(ctx *gin.Context) {
 	username := ctx.PostForm("user")
 	password := ctx.PostForm("password")
@@ -38,6 +50,18 @@ func (u *User) Authenticate(ctx *gin.Context) {
 	}
 }
 
+// AddUser godoc
+// @Summary Add a new user
+// @Description Add a new user
+// @Tags user
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Token"
+// @Param user body models.AddUser true "Add user"
+// @Failure 500 {object} models.Error
+// @Failure 400 {object} models.Error
+// @Success 200 {object} models.Message
+// @Router /users [post]
 func (u *User) AddUser(ctx *gin.Context) {
 	var addUser models.AddUser
 	if err := ctx.ShouldBindJSON(&addUser); err != nil {
@@ -64,6 +88,16 @@ func (u *User) AddUser(ctx *gin.Context) {
 	}
 }
 
+// ListUsers godoc
+// @Summary List all existing users
+// @Description List all existing users
+// @Tags user
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Token"
+// @Failure 500 {object} models.Error
+// @Success 200 {array} models.User
+// @Router /users/list [get]
 func (u *User) ListUsers(ctx *gin.Context) {
 	var users []models.User
 	var err error
@@ -77,6 +111,17 @@ func (u *User) ListUsers(ctx *gin.Context) {
 	}
 }
 
+// GetUserByID godoc
+// @Summary Get a user by ID
+// @Description Get a user by ID
+// @Tags user
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Token"
+// @Param id path string true "User ID"
+// @Failure 500 {object} models.Error
+// @Success 200 {object} models.User
+// @Router /users/detail/{id} [get]
 func (u *User) GetUserByID(ctx *gin.Context) {
 	var user models.User
 	var err error

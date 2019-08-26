@@ -1,6 +1,9 @@
 package main
 
 import (
+	"io"
+	"os"
+
 	"github.com/gillepool/MovieBackend/src/user-microservice/controller"
 	"github.com/gillepool/MovieBackend/src/user-microservice/databases"
 	"github.com/gillepool/MovieBackend/src/user-microservice/utils"
@@ -14,11 +17,33 @@ type Main struct {
 	router *gin.Engine
 }
 
+// @title UserManagement Service API Document
+// @version 1.0
+// @description List APIs of UserManagement Service
+// @termsOfService http://swagger.io/terms/
+
+// @host 127.0.0.1:8808
+// @BasePath /api/v1
 func (m *Main) initServer() error {
 	var err error
 
 	if err = utils.LoadConfig(); err != nil {
+		print(err.Error())
 		return err
+	}
+
+	// Setting Gin Logger
+	if utils.Config.EnableGinFileLog {
+		f, _ := os.Create("logs/gin.log")
+		if utils.Config.EnableGinConsoleLog {
+			gin.DefaultWriter = io.MultiWriter(os.Stdout, f)
+		} else {
+			gin.DefaultWriter = io.MultiWriter(f)
+		}
+	} else {
+		if !utils.Config.EnableGinConsoleLog {
+			gin.DefaultWriter = io.MultiWriter()
+		}
 	}
 
 	m.router = gin.Default()
@@ -30,7 +55,7 @@ func main() {
 
 	m := Main{}
 
-	if m.initServer != nil {
+	if m.initServer() != nil {
 		return
 	}
 
